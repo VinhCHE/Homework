@@ -27,6 +27,20 @@ dName= {
        12:"Saturday",
        13:"Sunday"
        }
+mName= {
+       1:"January",
+       2:"February",
+       3:"March",
+       4:"April",
+       5:"May",
+       6:"June",
+       7:"July",       
+       8:"August",
+       9:"September",
+       10:"October",
+       11:"November",
+       12:"December",
+       }
 
 ########class
 class openingClass:
@@ -36,26 +50,27 @@ class openingClass:
     def __init__ (self,master):
         self.master = master
         master.title = "Project 1"
-        bToday=Button(master,height=8,width=16,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 0*86400).day)).grid(row=5, column=5)
-        bPlus1=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 1*86400).day)).grid(row=5, column=6)
-        bPlus2=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 2*86400).day)).grid(row=5, column=7)
-        bPlue3=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 3*86400).day)).grid(row=5, column=8)
-        bMinus1=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 1*86400).day)).grid(row=5, column=4)
-        bMinus2=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 2*86400).day)).grid(row=5, column=3)
-        bMinus3=Button(master,height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 3*86400).day)).grid(row=5, column=2)
+        bToday=Button(master,height=5,width=15,bg="white",text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 0*86400).day)).grid(row=5, column=5)
+        bPlus1=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 1*86400).day)).grid(row=5, column=6)
+        bPlus2=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 2*86400).day)).grid(row=5, column=7)
+        bPlue3=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + 3*86400).day)).grid(row=5, column=8)
+        bMinus1=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 1*86400).day)).grid(row=5, column=4)
+        bMinus2=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 2*86400).day)).grid(row=5, column=3)
+        bMinus3=Button(master,height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - 3*86400).day)).grid(row=5, column=2)
         bNext=Button(master,text="Next", command=self.fNext).grid(row=5, column=9)
         bBack=Button(master,text="Back", command=self.fBack).grid(row=5, column=1)
         #title
-        lToday=Label(master,pady=3,width=16,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)
-        lPlus1=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())+1])).grid(row=4, column=6)
-        lPlus2=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())+2])).grid(row=4, column=7)
-        lPlue3=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())+3])).grid(row=4, column=8)
-        lMinus1=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())-1])).grid(row=4, column=4)
-        lMinus2=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())-2])).grid(row=4, column=3)
-        lMinus3=Label(master,pady=3,width=10,text=str(dName[date.weekday(datetime.now())-3])).grid(row=4, column=2)
+        mToday=Label(master,pady=3,width=15,text=str(mName[date.fromtimestamp(datetime.timestamp(datetime.now())+86400*(dfDay)).month]+" "+str(date.fromtimestamp(datetime.timestamp(datetime.now())+86400*dfDay).year))).grid(row=3, column=5)
+        lToday=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)        
+        lPlus1=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())+1])).grid(row=4, column=6)
+        lPlus2=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())+2])).grid(row=4, column=7)
+        lPlue3=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())+3])).grid(row=4, column=8)
+        lMinus1=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-1])).grid(row=4, column=4)
+        lMinus2=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-2])).grid(row=4, column=3)
+        lMinus3=Label(master,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-3])).grid(row=4, column=2)
 
 #       self.button2=Button(master,text="this is another button", command=root.quit).pack()
-        self.label=Label(master,text="date",padx=10, pady=10,bg="gray").grid(row=6,column=1)
+        self.label=Label(master,text="date",bg="gray").grid(row=6,column=1)
     def greet(self):
         print("text response")
     def Tdate(self,a):
@@ -66,17 +81,21 @@ class openingClass:
         global dfDay
         print(dfDay/7)
         dfDay=dfDay+7
-        bToday=Button(height=8,width=16,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
-        bPlus1=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+1)*86400).day)).grid(row=5,column=6)
-        bPlus2=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+2)*86400).day)).grid(row=5,column=7)
-        bPlue3=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+3)*86400).day)).grid(row=5,column=8)
-        bMinus1=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+1)*86400).day)).grid(row=5,column=4)
-        bMinus2=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+2)*86400).day)).grid(row=5,column=3)
-        bMinus3=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+3)*86400).day)).grid(row=5,column=2)
+        if dfDay==0:
+            bToday=Button(height=5,width=15,bg="white",text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
+        else:
+            bToday=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
+        bPlus1=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+1)*86400).day)).grid(row=5,column=6)
+        bPlus2=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+2)*86400).day)).grid(row=5,column=7)
+        bPlue3=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+3)*86400).day)).grid(row=5,column=8)
+        bMinus1=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+1)*86400).day)).grid(row=5,column=4)
+        bMinus2=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+2)*86400).day)).grid(row=5,column=3)
+        bMinus3=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+3)*86400).day)).grid(row=5,column=2)
         bNext=Button(text="Next", command=self.fNext).grid(row=5, column=9)
         bBack=Button(text="Back", command=self.fBack).grid(row=5, column=1)
                 #title
-        lToday=Label(pady=3,width=16,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)
+        mToday=Label(pady=3,width=10,text=str(mName[date.fromtimestamp(datetime.timestamp(datetime.now())+86400*(dfDay)).month]+" "+str(date.fromtimestamp(datetime.timestamp(datetime.now())+86400*dfDay).year))).grid(row=3, column=5)
+        lToday=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)        
         lPlus1=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+1])).grid(row=4, column=6)
         lPlus2=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+2])).grid(row=4, column=7)
         lPlue3=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+3])).grid(row=4, column=8)
@@ -88,17 +107,21 @@ class openingClass:
         global dfDay
         print(dfDay/7)
         dfDay=dfDay-7
-        bToday=Button(height=8,width=16,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
-        bPlus1=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+1)*86400).day)).grid(row=5,column=6)
-        bPlus2=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+2)*86400).day)).grid(row=5,column=7)
-        bPlue3=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+3)*86400).day)).grid(row=5,column=8)
-        bMinus1=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+1)*86400).day)).grid(row=5,column=4)
-        bMinus2=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+2)*86400).day)).grid(row=5,column=3)
-        bMinus3=Button(height=5,width=10,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+3)*86400).day)).grid(row=5,column=2)
+        if dfDay==0:
+            bToday=Button(height=5,width=15,bg="white",text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
+        else:
+            bToday=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
+        bPlus1=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+1)*86400).day)).grid(row=5,column=6)
+        bPlus2=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+2)*86400).day)).grid(row=5,column=7)
+        bPlue3=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+3)*86400).day)).grid(row=5,column=8)
+        bMinus1=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+1)*86400).day)).grid(row=5,column=4)
+        bMinus2=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+2)*86400).day)).grid(row=5,column=3)
+        bMinus3=Button(height=5,width=15,text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) - (-dfDay+3)*86400).day)).grid(row=5,column=2)
         bNext=Button(text="Next", command=self.fNext).grid(row=5, column=9)
         bBack=Button(text="Back", command=self.fBack).grid(row=5, column=1)
         #title
-        lToday=Label(pady=3,width=16,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)
+        mToday=Label(pady=3,width=10,text=str(mName[date.fromtimestamp(datetime.timestamp(datetime.now())+86400*(dfDay)).month]+" "+str(date.fromtimestamp(datetime.timestamp(datetime.now())+86400*dfDay).year))).grid(row=3, column=5)
+        lToday=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())])).grid(row=4, column=5)        
         lPlus1=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+1])).grid(row=4, column=6)
         lPlus2=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+2])).grid(row=4, column=7)
         lPlue3=Label(pady=3,width=10,text=str(dName[date.weekday(datetime.now())+3])).grid(row=4, column=8)
