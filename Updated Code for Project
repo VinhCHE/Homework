@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 27 17:45:13 2020
+
+@author: mrptv
+"""
+
 from tkinter import *
 from datetime import date, datetime
 
@@ -45,12 +52,17 @@ mName= {
        }
 InputDate=0
 ########class
-detailF=""
+detailF=Frame(root)
+homeF=Frame(root)
 dateF =""
+timeF =""
 dInput=StringVar()
 nameInput=StringVar()
 detailInput=StringVar()
+hourInput=IntVar()
+minuteInput=IntVar()
 fileRead=[]
+selection=-1
 class openingClass:
     
 #    global dfDay
@@ -67,73 +79,154 @@ class openingClass:
 
 #   Function of button
     def textProcess(inP):
-        group=inP.split("#$)(*^)&#($%)(&*^)(#$*%)(*")
-#        group[0]=group[0].split("/")
-#        print(group)
-#        print(group[0])
-        openingClass.textFormat(group)
-        print("InP")
-    def textFormat(inP):
+        group=inP.split("###$#$##$###$##$#",1)
+        v0=group[0]
+        group=group[-1].split("###$#$##$###$##$#",1)
+        v1=group[0]
+        group=group[-1].split("###$#$##$###$##$#",1)
+        v2=group[0]
+        group=group[-1].split("###$#$##$###$##$#",1)
+        v3=group[0]
+#        print(v0,v1,v2,v3)
+        return openingClass.textFormat(v0,v1,v2,v3)
+#        print("InP")
+    def textFormat(v0,v1,v2,v3):
         result=""
-#        print("Line =", inP,inP[0]=='\n')
-        if len(inP[1])>20:
-            if len(inP[2])>10:
-                result=inP[0]+"          "+inP[1][0:20]+"          "+inP[2][0:10]
-            else:
-                result=inP[0]+"          "+inP[1][0:20]+"          "+' '*(9-len(inP[2]))+inP[2][0:len(inP[2])-1]
-        else:
-            if len(inP[2])>10:
-                result=inP[0]+"          "+' '*(20-len(inP[1]))+inP[1]+"          "+inP[2][0:10]
-            else:
-                result=inP[0]+"          "+' '*(20-len(inP[1]))+inP[1]+"          "+' '*(9-len(inP[2]))+inP[2][0:len(inP[2])-1]
-        print(result)
+        result="{0:10} AT {1:6}  Event name: {2:^20} detail: {3:>}".format(v0,v1,v2,v3)
+#        print(v0[1:2])
+        test=v0[1:2]
+
+#        "{0} at {1} Event name: {2:10} Detail: {3:20}".format(inP[0],inP[1],inP[2],inP[3])
         return result
-        
-        
-    def SaveB(detail,inP):
+    def changeB(inP,h,m):
+        global nameInput, detailInput,hourInput, minuteInput, root, selection, fileRead
+        inP=(dInput.get()+"###$#$##$###$##$#"+str(hourInput.get())+":"+str(minuteInput.get())+"###$#$##$###$##$#"+nameInput.get()+"###$#$##$###$##$#"+detailInput.get()+"\n")
+#        print("FindModify",fileRead[selection])
+        openingClass.FindModify(fileRead[selection],inP,"modify")        
+        openingClass.Home()
+    def SaveB(inP,h,m):
+        if isinstance(h.get(), int) and isinstance(m.get(), int):
+            if h.get()>=0 and h.get()<=23 and m.get()>=0 and m.get()<=59:
+                openingClass.Save(inP,h,m)
+                openingClass.Home()
+            else:
+                print("ERROR Value is out of range in SaveB")
+        else:
+            print("ERROR value is not an integer")
+    def decode(inP):
+        global fileRead
+        inP=fileRead[inP]
+        group=inP.split("###$#$##$###$##$#")
+        return group      
+    def encode(date,name,detail,h,m):
+        pass         
+    def Save(inP,h,m):
         global detailInput
         global dInput
         s=nameInput.get()
-        print(dInput.get()+"#$)(*^)&#($%)(&*^)(#$*%)(*"+s+"#$)(*^)&#($%)(&*^)(#$*%)(*"+detailInput.get())
+        s=s[0:-2]
+#        print(s,"testing")
+#        print(dInput.get()+"###$#$##$###$##$#"+str(h.get())+":"+str(m.get())+"###$#$##$###$##$#"+s+"###$#$##$###$##$#"+detailInput.get())
         f = open("data.project", "a")
-        f.write(dInput.get()+"#$)(*^)&#($%)(&*^)(#$*%)(*"+s+"#$)(*^)&#($%)(&*^)(#$*%)(*"+detailInput.get()+"\n")
+        f.write(dInput.get()+"###$#$##$###$##$#"+str(h.get())+":"+str(m.get())+"###$#$##$###$##$#"+s+"###$#$##$###$##$#"+detailInput.get()+"\n")
         f.close()
-        print("test")
-        openingClass.clearHome(inP)        
-    def clearHome(In):
+#        print("test")
+    def deleteB():
+        openingClass.FindModify(fileRead[selection[0]],"No input","delete")        
+        openingClass.Home()
+    def FindModify(inP_old,inP,mode):
+        print(inP_old,inP,mode)
+        f = open("data.project", "r+")
+        file=f.readlines()
+        print("finish readline")
+        count=0
+        for line in file:
+#            print("Comparing:",line,inP_old,line == inP_old)
+            if line.strip("\n") == inP_old:
+                print("Going to delete",line,inP_old)
+                del file[count]
+            else:
+                print("ERROR: Cannot find the line to delete.")
+            count = count+1
+            print(line,"is Line")
+        
+        if mode == "modify":
+            f.write(inP)
+        elif mode == "delete":
+            pass
+        else:
+            print("ERROR: Cannot find mode in function FindModify")
+        
+
+
+#        print(fileRead)
+        f.close()        
+    def fDel():
+        pass
+    def edit():
+        openingClass.InputFrame()
+        global dInput, nameInput, eDetail,detailInput,detailF, timeF, hourInput, minuteInput, root, selection
+#        print(selection)
+        inP=openingClass.decode(selection[0])
+        strDetail=inP[3]
+        detailInput.set(strDetail[0:-1])
+        nameInput.set(inP[2])
+        hourInput.set(int(inP[1].split(":")[0]))
+        minuteInput.set(int(inP[1].split(":")[1]))
+        dInput.set(datetime.now().strftime("%Y/%m/%d"))
+        detailF.destroy()
+        detailF=Frame(root)
+        detailF.grid(row=3, column =1)
+        spacing2=Label(detailF,padx=5).grid(row=14,column=1)
+        dateLanel=Label(detailF,textvariable=dInput).grid(row=15,column=2)
+        nameLabel=Label(detailF,text="Even Name:", height=3).grid(row=16, column=1)
+        eDate = Entry(detailF, width=100, textvariable=nameInput).grid(row=16, column=2)        
+        detailLabel=Label(detailF,text="Even Detail:", height=1).grid(row=17, column=1)
+        eDetail = Entry(detailF, width=100,textvariable=detailInput).grid(row=17, column=2)         
+        spacing2=Label(detailF,pady=20).grid(row=18,column=1)
+        bSave=Button(detailF,text="Change",command=lambda : openingClass.changeB(detailF,hourInput,minuteInput)).grid(row=20,column=3)        
+        bCancel=Button(detailF,text="Cancel", command= openingClass.deleteB).grid(row=20,column=4)
+        lHour=Label(detailF, text="  24-based hour:").grid(row=16,column=3)
+        sbHour=Entry(detailF,textvariable=hourInput).grid(row=16,column=4)
+        lMinute=Label(detailF,text="  Minute:").grid(row=17,column=3)
+        sbMinute=Entry(detailF,textvariable=minuteInput).grid(row=17,column=4)
+    def Home():
         var1=StringVar()
         var2=StringVar()
         global root
-        print("test2")
+        global detailF,homeF
         detailF.grid_forget()
+        homeF.grid_forget()
         homeF=Frame(root)        
-        homeF.grid(row=3, column =1)
+        homeF.grid(row=4, column =1)
         f = open("data.project", "r")
+        global fileRead
         fileRead=[]
         for count in f.readlines():
-            #print(count)
             fileRead.append(count)
         fileRead.sort()
-#        print(fileRead)
-        def inputlb():
-            var2.set(lb.get(lb.curselection()))
-    
+        def inputlb(a):
+            global fileRead, selection
+            selection=lb.curselection()
+            var2.set(lb.get(selection)) #get file into variable            
+#            print(fileRead[inp[0]],selection)#(fileRead[inp]) #get file into variable            
+            T1.config(text=("Currently select: "+var2.get()))
         lb=Listbox(homeF, listvariable=var1, width=100,height=10)
         for items in fileRead:
-            openingClass.textProcess(items)
-#            result=openingClass.textProcess(items)
-            lb.insert("end",items)
+            result=openingClass.textProcess(items)
+            lb.insert("end",result)
         lb.grid(row=6, column=1)
-        T=Label(homeF,textvariable=var2).grid(row=4,column=1)
-        B=Button(homeF,text="push", command=inputlb).grid(row=5,column=1)
+        T1=Label(homeF,text=("Currently select: "+var2.get()))
+        menuF2=Frame(homeF).grid(row=6,column=2)
+        createB=Button(homeF,text="Create Event",command=openingClass.InputFrame).grid(row=12,column=0)
+        editB=Button(homeF,text="Edit Event", command=openingClass.edit).grid(row=12,column=1)
+        deleteB=Button(homeF,text="Delete Event").grid(row=12,column=2)        
+        space=Label(homeF,text=" ").grid(row=13,column=2) 
+        T1.grid(row=11,column=1)
+        lb.bind("<<ListboxSelect>>",lambda e:inputlb(1)) 
+#        lb.bind("<<ListboxSelect>>", lambda e: inputlb(lb.curselection()[0])) 
         
-        
-        
-        
-#        global menuF
 
-
-        
 #   Starting Function
     def __init__ (self,master):
         self.master = master
@@ -159,24 +252,14 @@ class openingClass:
         lMinus1=Label(dateF,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-1])).grid(row=4, column=4)
         lMinus2=Label(dateF,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-2])).grid(row=4, column=3)
         lMinus3=Label(dateF,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-3])).grid(row=4, column=2)
-
-#######Menu
-        spacing1=Label(dateF,padx=10).grid(row=9,column=1)
-        menuF=Frame(master)
-        menuF.grid(row=2, column =1)
-        Menu1=Button(menuF,width=10,text="Place holder").grid(row=10, column=5)
-        Menu2=Button(menuF,width=10,text="Place holder").grid(row=10, column=6)
-        Menu3=Button(menuF,width=10,text="Place holder").grid(row=10, column=7)
-        Menu4=Button(menuF,width=10,text="Place holder").grid(row=10, column=8)
-        Menu5=Button(menuF,width=10,text="Place holder").grid(row=10, column=4)
-        Menu6=Button(menuF,width=10,text="Place holder").grid(row=10, column=3)
-        Menu7=Button(menuF,width=10,text="Place holder").grid(row=10, column=2)
+        openingClass.Home()        
 
 #detail
-        global dInput, nameInput, eDetail,detailInput,detailF
-
-        dInput.set('2020/12/02')
-        detailF=Frame(master)
+    def InputFrame():
+        global dInput, nameInput, eDetail,detailInput,detailF, timeF, hourInput, minuteInput, root
+        detailF.grid_forget()        
+        dInput.set(datetime.now().strftime("%Y/%m/%d"))
+        detailF=Frame(root)
         detailF.grid(row=3, column =1)
         spacing2=Label(detailF,padx=5).grid(row=14,column=1)
         dateLanel=Label(detailF,textvariable=dInput).grid(row=15,column=2)
@@ -185,14 +268,15 @@ class openingClass:
         detailLabel=Label(detailF,text="Even Detail:", height=1).grid(row=17, column=1)
         eDetail = Entry(detailF, width=100,textvariable=detailInput).grid(row=17, column=2)         
         spacing2=Label(detailF,pady=20).grid(row=18,column=1)
-        EndLabel=Label(detailF, textvariable=nameInput, height=3).place(x=100,y=460)  
-        bSave=Button(detailF,text="Save",command=lambda : openingClass.SaveB(1,menuF)).grid(row=19,column=5)        
-        bCancel=Button(detailF,text="Cancel").grid(row=19,column=7)
+        bSave=Button(detailF,text="Save",command=lambda : openingClass.SaveB(detailF,hourInput,minuteInput)).grid(row=20,column=5)        
+        bCancel=Button(detailF,text="Cancel",command= openingClass.Home).grid(row=20,column=7)
+        lHour=Label(detailF, text="  24-based hour:").grid(row=16,column=3)
+        sbHour=Entry(detailF,textvariable=hourInput).grid(row=16,column=4)
+        lMinute=Label(detailF,text="  Minute:").grid(row=17,column=3)
+        sbMinute=Entry(detailF,textvariable=minuteInput).grid(row=17,column=4)
         
-
-
     def Tdate(self,a):
-        today = datetime.timestamp(datetime.now()) + a*86400
+        today =datetime.timestamp(datetime.now()) + a*86400
         rtoday=date.fromtimestamp(today)
         return rtoday.day
     def fNext(self):
@@ -200,9 +284,9 @@ class openingClass:
         print(dfDay/7)
         dfDay=dfDay+7
         global dateF
-        dateF.destroy()
-        dateF=Frame(root)
-        dateF.grid(row=1,column=1)
+#        dateF.grid_forget()
+#        dateF=Frame(root)
+#        dateF.grid(row=1,column=1)
         if dfDay==0:
             bToday=Button(dateF,height=5,width=15,bg="white",text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
         else:
@@ -230,9 +314,6 @@ class openingClass:
         print(dfDay/7)
         dfDay=dfDay-7
         global dateF
-        dateF.destroy()
-        dateF=Frame(root)
-        dateF.grid(row=1,column=1)
         if dfDay==0:
             bToday=Button(dateF,height=5,width=15,bg="white",text=str(date.fromtimestamp(datetime.timestamp(datetime.now()) + (dfDay+0)*86400).day)).grid(row=5,column=5)
         else:
@@ -255,10 +336,7 @@ class openingClass:
         lMinus2=Label(dateF,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-2])).grid(row=4, column=3)
         lMinus3=Label(dateF,pady=3,width=15,text=str(dName[date.weekday(datetime.now())-3])).grid(row=4, column=2)
 
-        
-
-
-
 openC=openingClass(root)
-
+#Save(inP,h,m)
+#FindModify(inP_old,inP,mode)
 root.mainloop()
