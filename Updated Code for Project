@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-@author: Vinh
+"""
+Created on Fri Nov 27 17:45:13 2020
+
+@author: mrptv
+"""
+
 from tkinter import *
 from datetime import date, datetime
 from os import path
@@ -89,6 +94,8 @@ class openingClass:
         return result
     def changeB(inP,h,m):
         global nameInput, detailInput,hourInput, minuteInput, root, selection, fileRead
+        if  len(detailInput.get())==0 or len(nameInput.get())==0:
+            return
         inP=(dInput.get()+"###$#$##$###$##$#"+str(hourInput.get())+":"+str(minuteInput.get())+"###$#$##$###$##$#"+nameInput.get()+"###$#$##$###$##$#"+detailInput.get()+"\n")
         openingClass.FindModify(fileRead[selection],inP,"modify")        
         openingClass.Home()
