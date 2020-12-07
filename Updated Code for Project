@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 27 17:45:13 2020
-
-@author: mrptv
-"""
-
+@author: Vinh
 from tkinter import *
 from datetime import date, datetime
 from os import path
